@@ -21,12 +21,12 @@ from rest_framework import routers
 import login.api
 
 router = routers.DefaultRouter()
-router.register('auth', login.api.UserRegisterViewSet, basename='auth')
-#router.register('signin', login.api.UserInfoViewSet, basename='signin')
+router.register('signup', login.api.UserRegisterViewSet, basename='signup')
+router.register('signin', login.api.UserAuthViewSet, basename='signin')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include(router.urls)),
+    path('api/auth/', include(router.urls)),
 ]
 
 if settings.DEBUG:

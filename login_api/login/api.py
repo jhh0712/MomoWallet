@@ -11,6 +11,7 @@ from rest_framework.decorators import action
 
 User = get_user_model()
 
+
 class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -24,22 +25,14 @@ class RegisterSerializer(serializers.ModelSerializer):
         user.save()
         return user
 
-    def validate(self, data):
-        print('log : validate call')
-        username = data.get('username', None)
-        if User.objects.filter(username=username).exists():
-            raise serializers.ValidationError(f'username [{username}] already exists!')
-        data['last_login'] = date.today()
-        print('log : validate end')
-        return data
 
 class UserRegisterViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = RegisterSerializer
 
     @action(detail=False, methods=['GET', 'POST'])
-    def signup(self, request):
-        print('log : signup call')
+    def post(self, request):
+        print('log : signup call2')
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid(raise_exception=True):
             user = serializer.save(request)
@@ -53,3 +46,54 @@ class UserRegisterViewSet(viewsets.ModelViewSet):
         else:
             return JsonResponse({'error': serializer.validate(request.data)},
                                 status=status.HTTP_400_BAD_REQUEST)
+
+
+class AuthSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['username', 'password']
+
+    def validate(self, data):
+        print('log : validate call')
+        username = data.get('username')
+        password = data.get('password', None)
+        if User.objects.filter(username=username).exists():
+            user = User.objects.get(username=username)
+
+            if not user.check_password(password):
+                raise serializers.ValidationError('Wrong Password!')
+                return {'error': 'wrong password'}
+        else:
+            raise serializers.ValidationError('Not Exist User!')
+            return {'error': 'not exist user'}
+
+        token = RefreshToken.for_user(user)
+        refresh = str(token)
+        access = str(token.access_token)
+
+        return {'username': username, 'refresh': refresh, 'access': access}
+
+
+class UserAuthViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = AuthSerializer
+
+    @action(detail=False, methods=['GET', 'POST'])
+    def post(self, request):
+        print('log : signin call')
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid(raise_exception=False):
+            username = serializer.validated_data['username']
+            refresh = serializer.validated_data['refresh']
+            access = serializer.validated_data['access']
+
+            return JsonResponse({
+                'username': username,
+                'refresh': refresh,
+                'access': access
+            })
+        else:
+            return JsonResponse({'error': serializer.validate(request.data)},
+                                status=status.HTTP_400_BAD_REQUEST)
+
+
