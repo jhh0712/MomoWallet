@@ -76,12 +76,7 @@ export default class Register extends Component<Props, State> {
                 });
             },
             error => {
-                const resMessage =
-                    (error.response &&
-                    error.response.data &&
-                    error.response.data.message) ||
-                error.message ||
-                error.toString();
+                const resMessage = `${JSON.stringify(error.response.data)} [${error.message}]`
 
                 this.setState({
                     successful: false,

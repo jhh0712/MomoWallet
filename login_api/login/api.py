@@ -82,18 +82,11 @@ class UserAuthViewSet(viewsets.ModelViewSet):
     def post(self, request):
         print('log : signin call')
         serializer = self.serializer_class(data=request.data)
-        if serializer.is_valid(raise_exception=False):
-            username = serializer.validated_data['username']
-            refresh = serializer.validated_data['refresh']
-            access = serializer.validated_data['access']
-
-            return JsonResponse({
-                'username': username,
-                'refresh': refresh,
-                'access': access
-            })
-        else:
-            return JsonResponse({'error': serializer.validate(request.data)},
+        try:
+            return JsonResponse(serializer.validate(request.data), status=status.HTTP_200_OK)
+        except Exception as e:
+            return JsonResponse({'error': f'{e}'},
                                 status=status.HTTP_400_BAD_REQUEST)
+
 
 
