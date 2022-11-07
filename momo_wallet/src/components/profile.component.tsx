@@ -8,7 +8,7 @@ type Props = {};
 type State = {
     redirect: string | null,
     userReady: boolean,
-    currentUser: IUser & { accessToken: string }
+    currentUser: IUser & { access: string }
 }
 
 export default class Profile extends Component<Props, State> {
@@ -18,7 +18,7 @@ export default class Profile extends Component<Props, State> {
         this.state = {
             redirect: null,
             userReady: false,
-            currentUser: { accessToken: "" }
+            currentUser: { access: "" }
         };
     }
 
@@ -49,12 +49,12 @@ export default class Profile extends Component<Props, State> {
                         </header>
                         <p>
                             <strong>Token:</strong>{" "}
-                            {currentUser.accessToken.substring(0, 20)} ...{" "}
-                            {currentUser.accessToken.substr(currentUser.accessToken.length - 20)}
+                            {currentUser.access.substring(0, 20)} ...{" "}
+                            {currentUser.access.substr(currentUser.access.length - 20)}
                         </p>
                         <p>
                             <strong>Id:</strong>{" "}
-                            {currentUser.id}
+                            {currentUser.username}
                         </p>
                         <p>
                             <strong>Email:</strong>{" "}

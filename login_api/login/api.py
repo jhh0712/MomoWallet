@@ -70,8 +70,9 @@ class AuthSerializer(serializers.ModelSerializer):
         token = RefreshToken.for_user(user)
         refresh = str(token)
         access = str(token.access_token)
+        email = user.email
 
-        return {'username': username, 'refresh': refresh, 'access': access}
+        return {'username': username, 'email': email, 'refresh': refresh, 'access': access}
 
 
 class UserAuthViewSet(viewsets.ModelViewSet):

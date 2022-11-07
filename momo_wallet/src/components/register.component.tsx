@@ -71,7 +71,7 @@ export default class Register extends Component<Props, State> {
         ).then(
             response => {
                 this.setState({
-                    message: response.data.message,
+                    message: JSON.stringify(response.data),
                     successful: true
                 });
             },
