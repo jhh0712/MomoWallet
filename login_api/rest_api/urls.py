@@ -19,14 +19,17 @@ from django.conf import settings
 from rest_framework import routers
 
 import login.api
+import public_content.api
 
 router = routers.DefaultRouter()
-router.register('signup', login.api.UserRegisterViewSet, basename='signup')
-router.register('signin', login.api.UserAuthViewSet, basename='signin')
+router.register('auth/signup', login.api.UserRegisterViewSet, basename='signup')
+router.register('auth/signin', login.api.UserAuthViewSet, basename='signin')
+router.register('home/save-version', public_content.api.VersionSaveViewSet, basename='save-version')
+router.register('home/get-version', public_content.api.VersionViewSet, basename='get-version')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/auth/', include(router.urls)),
+    path('api/', include(router.urls))
 ]
 
 if settings.DEBUG:

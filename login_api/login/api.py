@@ -1,6 +1,3 @@
-import json
-from datetime import date
-
 from django.contrib.auth import get_user_model
 from django.http import JsonResponse
 from rest_framework_simplejwt.tokens import RefreshToken

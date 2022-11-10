@@ -12,7 +12,7 @@ export default class Home extends Component<Props, State> {
         super(props);
 
         this.state = {
-            content: ""
+            content: "테스트"
         };
     }
 
@@ -20,7 +20,7 @@ export default class Home extends Component<Props, State> {
         UserService.getPublicContent().then(
             response => {
                 this.setState({
-                    content: response.data
+                    content: JSON.stringify(response.data)
                 });
             },
             error => {
@@ -39,6 +39,7 @@ export default class Home extends Component<Props, State> {
             <div className="container">
                 <header className="jumbotron">
                     <h3>{this.state.content}</h3>
+                    <img className="logo-img" src="logo512.png"/>
                 </header>
             </div>
         );

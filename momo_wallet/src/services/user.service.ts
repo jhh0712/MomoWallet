@@ -1,11 +1,16 @@
 import axios from 'axios';
+import App from '../App';
 import authHeader from './auth-header';
+import { app } from 'electron';
 
-const API_URL = 'http://localhost:8080/api/test/';
+const API_URL = 'http://localhost:8080/api/';
 
 class UserService {
     getPublicContent() {
-        return axios.get(API_URL + 'all');
+        let app_version = 1234;
+        return axios.post(API_URL + 'home/get-version/post/', {
+            app_version
+        });
     }
 
     getUserBoard() {

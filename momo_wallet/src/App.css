@@ -69,3 +69,8 @@ label {
   -webkit-border-radius: 50%;
   border-radius: 50%;
 }
+
+.logo-img {
+  margin: auto;
+  display: block;
+}
